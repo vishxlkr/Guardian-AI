@@ -1,0 +1,35 @@
+@echo off
+:: Personal Security Software - Quick Start Solution
+:: This will start your security software immediately!
+
+echo =========================================
+echo Personal Security Software - Quick Start
+echo =========================================
+echo.
+
+:: Change to your project directory
+cd /d "E:\pytorch\Deep Learning for Computer Vision\Laptop_security"
+
+:: Check if Python is available
+python --version >nul 2>&1
+if errorlevel 1 (
+    echo ERROR: Python not found in PATH
+    echo Please make sure Python is installed and in PATH
+    pause
+    exit /b 1
+)
+
+echo Starting Personal Security Software...
+echo.
+echo The application will run in this window.
+echo To run in background instead, use: start /min python main.py run
+echo.
+echo Press Ctrl+C to stop the application.
+echo =========================================
+echo.
+
+:: Run the application
+python main.py run
+
+:: If the application exits, pause to see any error messages
+pause

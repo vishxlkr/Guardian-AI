@@ -1,0 +1,88 @@
+# Personal Security Software Configuration
+app:
+  name: "Personal Security Software"
+  version: "1.0.0"
+  log_level: "INFO"
+  
+# Camera settings
+camera:
+  device_id: 0  # 0 for default camera
+  resolution:
+    width: 640
+    height: 480
+  fps: 30
+  buffer_size: 2
+
+# Face recognition settings
+face_recognition:
+  tolerance: 0.6  # Lower = more strict (0.4-0.6 recommended)
+  model: "hog"  # "hog" for speed, "cnn" for accuracy
+  scale_factor: 0.25  # Scale down image for faster processing
+  
+# Screen guard module
+screen_guard:
+  enabled: true
+  check_interval: 0.5  # seconds between checks
+  blur_settings:
+    duration: 2  # seconds to show blur
+    radius: 25  # blur intensity
+    padding: 60  # pixels around face
+    opacity: 0.8  # overlay transparency
+  unknown_face_action: "blur"  # blur, black, minimize
+
+# Intruder monitor module  
+intruder_monitor:
+  enabled: true
+  capture_on_failed_login: true
+  monitor_event_log: true  # Windows Event Log monitoring
+  max_failed_attempts: 3
+  lockout_duration: 300  # seconds
+  
+# Plugin settings
+plugins:
+  enabled: true
+  directory: "src/plugins"
+  
+  # Alert plugin configuration
+  ExampleAlertPlugin:
+    enabled: true
+    sound_alert: true
+    desktop_notification: true
+    email_alert: false
+    voice_alert: false
+    
+    # Sound settings
+    beep_frequency: 1000
+    beep_duration: 500
+    
+    # Email settings (if enabled)
+    smtp_server: "smtp.gmail.com"
+    smtp_port: 587
+    email_from: "your-email@gmail.com"
+    email_to: "alert-email@gmail.com"
+    email_password: "your-app-password"
+
+# Storage settings
+storage:
+  intruder_images_dir: "data\\images\\intruders"
+  authorized_faces_dir: "data\\images\\authorized"
+  log_dir: "data\\logs"
+  retention_days: 30  # Auto-cleanup old files
+  max_storage_gb: 10  # Maximum storage usage
+
+# Windows specific settings
+windows:
+  run_at_startup: true
+  minimize_to_tray: true
+  require_admin: true
+  event_log_monitoring:
+    enabled: true
+    check_interval: 5  # seconds
+    failed_login_event_id: 4625
+    
+# Security settings
+security:
+  encrypt_images: false
+  secure_delete: true
+  auto_lock_screen: true
+  alert_on_multiple_faces: true

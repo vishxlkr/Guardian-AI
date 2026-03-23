@@ -1,0 +1,62 @@
+# Authorized Faces Configuration
+# This file stores metadata about authorized faces
+# Face encodings are stored separately in the face_manager cache
+
+authorized_faces:
+  # Example entry (will be populated by the application)
+  # john_doe:
+  #   display_name: "John Doe"
+  #   added_date: "2024-01-15T10:30:00"
+  #   added_by: "admin"
+  #   access_level: "full"
+  #   notes: "Primary user"
+  #   image_file: "john_doe.jpg"
+  #   last_seen: "2024-01-15T14:22:30"
+  #   recognition_count: 145
+
+# Face recognition settings per user
+face_settings:
+  default:
+    tolerance: 0.6  # Recognition threshold (0.4 = strict, 0.6 = normal, 0.8 = lenient)
+    require_liveness: false  # Require liveness detection
+    max_distance: 0.6  # Maximum face distance for positive match
+    
+# Access rules
+access_rules:
+  # Time-based restrictions
+  time_restrictions:
+    enabled: false
+    # Example:
+    # john_doe:
+    #   allowed_hours: "08:00-18:00"
+    #   allowed_days: ["Mon", "Tue", "Wed", "Thu", "Fri"]
+    
+  # Multi-factor requirements
+  multi_factor:
+    enabled: false
+    require_password: false
+    require_pin: false
+    
+# Temporary access
+temporary_access:
+  # Example:
+  # guest_user:
+  #   expires: "2024-01-20T00:00:00"
+  #   added_by: "admin"
+  #   reason: "Temporary contractor"
+
+# Security policies
+security_policies:
+  max_failed_attempts: 5
+  lockout_duration: 300  # seconds
+  require_periodic_update: true
+  update_interval_days: 90
+  alert_on_unknown_face: true
+  capture_unknown_faces: true
+  
+# Statistics tracking
+statistics:
+  track_recognition_times: true
+  track_locations: false
+  generate_reports: true
+  report_interval: "weekly"

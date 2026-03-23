@@ -1,0 +1,92 @@
+# Personal Security Software - PowerShell Runner
+# Right-click and select "Run with PowerShell"
+
+Clear-Host
+Write-Host ""
+Write-Host "==========================================" -ForegroundColor Cyan
+Write-Host " PERSONAL SECURITY SOFTWARE" -ForegroundColor Green
+Write-Host " Face Recognition Protection System" -ForegroundColor Green  
+Write-Host "==========================================" -ForegroundColor Cyan
+Write-Host ""
+
+# Change to project directory
+Set-Location "E:\pytorch\Deep Learning for Computer Vision\Laptop_security"
+
+# Check if main.py exists
+if (-not (Test-Path "main.py")) {
+    Write-Host "[ERROR] main.py not found!" -ForegroundColor Red
+    Write-Host "Current directory: $(Get-Location)" -ForegroundColor Yellow
+    Read-Host "Press Enter to exit"
+    exit
+}
+
+Write-Host "[✓] Project directory found" -ForegroundColor Green
+
+# Check Python
+try {
+    $pythonVersion = python --version 2>&1
+    Write-Host "[✓] Python installed: $pythonVersion" -ForegroundColor Green
+} catch {
+    Write-Host "[X] Python not found in PATH!" -ForegroundColor Red
+    Read-Host "Press Enter to exit"
+    exit
+}
+
+Write-Host ""
+Write-Host "Choose running mode:" -ForegroundColor Yellow
+Write-Host "1. Run with console (see all messages)"
+Write-Host "2. Run in background (minimized)"
+Write-Host "3. Install as scheduled task (auto-start)"
+Write-Host "4. Exit"
+Write-Host ""
+
+$choice = Read-Host "Enter choice (1-4)"
+
+switch ($choice) {
+    "1" {
+        Write-Host ""
+        Write-Host "Starting Security System..." -ForegroundColor Green
+        Write-Host "Press Ctrl+C to stop" -ForegroundColor Yellow
+        Write-Host ""
+        python main.py run
+    }
+    "2" {
+        Write-Host ""
+        Write-Host "Starting in background..." -ForegroundColor Green
+        Start-Process python -ArgumentList "main.py run" -WindowStyle Minimized
+        Write-Host ""
+        Write-Host "✓ Security system is now running in background!" -ForegroundColor Green
+        Write-Host "✓ Check taskbar for the Python window" -ForegroundColor Green
+        Write-Host ""
+    }
+    "3" {
+        Write-Host ""
+        Write-Host "Creating scheduled task..." -ForegroundColor Yellow
+        
+        $taskName = "PersonalSecurityAutoStart"
+        $pythonPath = (Get-Command python).Path
+        $scriptPath = Join-Path (Get-Location) "main.py"
+        
+        # Remove existing task
+        schtasks /delete /tn $taskName /f 2>$null
+        
+        # Create new task
+        $action = New-ScheduledTaskAction -Execute $pythonPath -Argument "main.py run" -WorkingDirectory (Get-Location)
+        $trigger = New-ScheduledTaskTrigger -AtLogOn
+        $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
+        
+        Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Settings $settings -Force
+        
+        Write-Host "✓ Auto-start task created!" -ForegroundColor Green
+        Write-Host "✓ The app will start automatically on next login" -ForegroundColor Green
+    }
+    "4" {
+        exit
+    }
+    default {
+        Write-Host "Invalid choice!" -ForegroundColor Red
+    }
+}
+
+Write-Host ""
+Read-Host "Press Enter to exit"
